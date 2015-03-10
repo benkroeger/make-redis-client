@@ -21,7 +21,8 @@ var validRedisOptions = [
 	'connect_timeout',
 	'max_attempts',
 	'auth_pass',
-	'family'
+	'family',
+	'db'
 ];
 
 module.exports = function makeRedisClient(args) {
@@ -33,13 +34,13 @@ module.exports = function makeRedisClient(args) {
 	if (!_.isFunction(args.logError)) {
 		args.logError = _.noop;
 	}
-	
+
 	if (!_.isFunction(args.logDebug)) {
 		args.logDebug = _.noop;
 	}
 
 	var redisClient;
-	
+
 	// defining default values
 	var redisOptions = _.merge({
 		host: '127.0.0.1',
@@ -66,6 +67,22 @@ module.exports = function makeRedisClient(args) {
 		args.logError('Failed to connecto to redis: %j', redisOptions);
 		args.logDebug(err);
 	});
+
+	redisClient.on('ready', function() {
+		args.logDebug('client is ready');
+		if (_.isNUmber(redisOptions.db)) {
+			redisClient.select(redisOptions.db, function(err) {
+				if (err) {
+					args.logError('failed to select database {%d}', redisOptions.db);
+				}
+			});
+		}
+	});
+
+	redisClient.on('connect', function() {
+		args.logDebug('client is connected');
+	});
+
 
 	return redisClient;
 };
