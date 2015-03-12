@@ -70,7 +70,7 @@ module.exports = function makeRedisClient(args) {
 
 	redisClient.on('ready', function() {
 		args.logDebug('client is ready');
-		if (_.isNUmber(redisOptions.db)) {
+		if (_.isNumber(redisOptions.db)) {
 			redisClient.select(redisOptions.db, function(err) {
 				if (err) {
 					args.logError('failed to select database {%d}', redisOptions.db);

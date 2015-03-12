@@ -1,6 +1,6 @@
 {
   "name": "make-redis-client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Provides a simple factory function that returns a redis client instance",
   "author": {
     "name": "Benjamin Kroeger",
@@ -18,7 +18,7 @@
     "redis-client"
   ],
   "dependencies": {
-    "lodash": "^3.3.1",
+    "lodash": "^3.35.0",
     "redis": "^0.12.1"
   },
   "devDependencies": {
