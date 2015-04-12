@@ -1,4 +1,6 @@
-#  [![NPM version][npm-image]][npm-url] 
+[![NPM info](https://nodei.co/npm/make-redis-client.png?downloads=true)](https://nodei.co/npm/make-redis-client.png?downloads=true)
+
+[![dependencies](https://david-dm.org/benkroeger/make-redis-client.png)](https://david-dm.org/benkroeger/make-redis-client.png)
 
 > Provides a simple factory function that returns a redis client instance
 
