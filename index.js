@@ -31,12 +31,8 @@ module.exports = function makeRedisClient(args) {
 		args = {};
 	}
 
-	if (!_.isFunction(args.logError)) {
-		args.logError = _.noop;
-	}
-
-	if (!_.isFunction(args.logDebug)) {
-		args.logDebug = _.noop;
+	if (typeof args.debug !== 'function') {
+		args.debug = _.noop;
 	}
 
 	var redisClient;
@@ -64,25 +60,24 @@ module.exports = function makeRedisClient(args) {
 	// }
 
 	redisClient.on('error', function(err) {
-		args.logError('Failed to connecto to redis: %j', redisOptions);
-		args.logDebug(err);
+		args.debug('Failed to connecto to redis: %j', redisOptions);
+		args.debug(err);
 	});
 
 	redisClient.on('ready', function() {
-		args.logDebug('client is ready');
+		args.debug('client is ready');
 		if (_.isNumber(redisOptions.db)) {
 			redisClient.select(redisOptions.db, function(err) {
 				if (err) {
-					args.logError('failed to select database {%d}', redisOptions.db);
+					args.debug('failed to select database {%d}', redisOptions.db);
 				}
 			});
 		}
 	});
 
 	redisClient.on('connect', function() {
-		args.logDebug('client is connected');
+		args.debug('client is connected');
 	});
-
 
 	return redisClient;
 };
