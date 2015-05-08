@@ -14,9 +14,10 @@ $ npm install --save make-redis-client
 
 ## Usage
 
-Call the factory with a plain object containing the properties you want your redis client to be configured with.
+Call the exported function with a plain object containing the properties you want your redis client to be configured with. It returns a redisClient.
 
-In addition to the config options from [redis](https://www.npmjs.com/package/redis), you can also define the database-number you want to select.
+In addition to the config options from [redis](https://www.npmjs.com/package/redis), you can also define the database you want to select in redis.
+
 
 ## Valid Options
 
