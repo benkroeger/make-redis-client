@@ -62,18 +62,18 @@ function makeRedisClient(args) {
   };
 
   // merge defaults with valid redis options from the provided args literal
-  validRedisOptions.forEach(function(name){
-  	if (args[name]) {
-  		redisOptions[name] = args[name];
-  	}
+  validRedisOptions.forEach(function(name) {
+    if (args[name]) {
+      redisOptions[name] = args[name];
+    }
   });
 
   // make unixSocket superseed host and port information
   if (redisOptions.unixSocket) {
-  	debug('creating redis client for unix socket');
+    debug('creating redis client for unix socket');
     redisClient = redis.createClient(redisOptions.unixSocket, redisOptions);
   } else {
-  	debug('creating redis client for host "%s" and port "%d"', redisOptions.host, redisOptions.port);
+    debug('creating redis client for host "%s" and port "%d"', redisOptions.host, redisOptions.port);
     redisClient = redis.createClient(redisOptions.port, redisOptions.host, redisOptions);
   }
 
@@ -86,22 +86,23 @@ function makeRedisClient(args) {
 
   // NOTE: we are intentionally not handling the "error" event, since we want the actual applicaton code to deal with it
 
-	// listen for "ready" event and select the configured database if any
+  if (typeof args.db === 'number') {
+    debug('selecting database "%d"', args.db);
+    redisClient.select(args.db, function(err) {
+      if (err) {
+        debug('failed to select database {%d}', args.db);
+        redisClient.emit('error', err);
+      }
+    });
+  }
+
+  // listen for "ready" event and select the configured database if any
   redisClient.on('ready', function() {
-  	debug('redis client for host "%s" and port "%d" is ready', redisOptions.host, redisOptions.port);
-    if (typeof args.db === 'number') {
-    	debug('selecting database "%d"', args.db);
-      redisClient.select(args.db, function(err) {
-        if (err) {
-          debug('failed to select database {%d}', args.db);
-          redisClient.emit('error', err);
-        }
-      });
-    }
+    debug('redis client for host "%s" and port "%d" is ready', redisOptions.host, redisOptions.port);
   });
 
   redisClient.on('connect', function() {
-  	debug('redis client for host "%s" and port "%d" is connected', redisOptions.host, redisOptions.port);
+    debug('redis client for host "%s" and port "%d" is connected', redisOptions.host, redisOptions.port);
   });
 
   return redisClient;
