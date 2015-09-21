@@ -4,6 +4,8 @@
 
 > Provides a simple factory function that returns a redis client instance
 
+# Deprecation notice
+Since the [redis](https://www.npmjs.com/package/redis) module recently evolved and now supports urls as connection parameter, there is no urgent need for this package anymore
 
 ## Install
 
